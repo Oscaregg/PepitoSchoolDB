@@ -21,8 +21,42 @@ namespace SchoolDB.Presentation
             InitializeComponent();
         }
 
+        public void ClearText()
+        {
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+            txtCarnet.Text = "";
+            txtDireccion.Text = "";
+            txtCorreo.Text = "";
+            txtTelefono.Text = "";
+            nudMatematicas.Value = 0;
+            nudContabilidad.Value = 0;
+            nudEstadistica.Value = 0;
+            nudProgramacion.Value = 0;
+
+        }
+
+        public bool NullValidation()
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtApellido.Text) ||
+              string.IsNullOrWhiteSpace(txtCarnet.Text) || string.IsNullOrWhiteSpace(txtDireccion.Text) ||
+              string.IsNullOrWhiteSpace(txtCorreo.Text) || string.IsNullOrWhiteSpace(txtTelefono.Text))
+            {
+                MessageBox.Show("Debe agregar toda la informacion completa", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (!NullValidation())
+            {
+                return;
+            }
             Estudiante estudiante = new Estudiante()
             {
                 Nombres = txtNombre.Text,
@@ -41,6 +75,8 @@ namespace SchoolDB.Presentation
             estudianteService.Create(estudiante);
 
             dgvStudent.DataSource = estudianteService.GetAll();
+        
+            ClearText();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -55,6 +91,11 @@ namespace SchoolDB.Presentation
             if (dgvStudent.CurrentRow.Selected == false)
             {
                 MessageBox.Show("Seleccione un estudiante");
+                return;
+            }
+
+            if (!NullValidation())
+            {
                 return;
             }
 
@@ -75,6 +116,8 @@ namespace SchoolDB.Presentation
 
             estudianteService.Update(estudent);
             dgvStudent.DataSource = estudianteService.GetAll();
+        
+            ClearText();
         }
 
         private void dgvStudent_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -104,6 +147,8 @@ namespace SchoolDB.Presentation
             Estudiante estudiante = estudianteService.FindById(id);
             estudianteService.Delete(estudiante);
             dgvStudent.DataSource = estudianteService.GetAll();
+
+            ClearText();
         }
 
         private void btnPromedio_Click(object sender, EventArgs e)
@@ -119,7 +164,7 @@ namespace SchoolDB.Presentation
             Estudiante estudiante = estudianteService.FindById(id);
             decimal promedio = estudianteService.Promedio(estudiante);
 
-            MessageBox.Show($"El promedio del estudiante: {estudiante.Nombres} es:  {promedio}");
+            MessageBox.Show($"El promedio del estudiante: {estudiante.Nombres} es  {promedio}");
         }
     }
 }

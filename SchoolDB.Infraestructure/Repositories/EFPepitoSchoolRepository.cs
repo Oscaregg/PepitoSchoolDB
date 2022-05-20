@@ -132,7 +132,7 @@ namespace SchoolDB.Infraestructure.Repositories
 
                 if (estudiante is null)
                 {
-                    throw new ArgumentNullException("Hola ");
+                    throw new ArgumentNullException("El objeto no puede ser null o estar vacio");
                 }
 
                 estudiante.Nombres = t.Nombres;
